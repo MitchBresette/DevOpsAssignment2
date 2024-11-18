@@ -1,9 +1,15 @@
-
+import os
 from flask import Flask, render_template
 from pymongo import MongoClient
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
-mongo_client = MongoClient("mongodb+srv://MitchBresette:Fn01wIVmeFasZBes@cluster0.8sk8t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+MONGODB_USERNAME = os.getenv('MONGODB_USERNAME')
+MONGODB_PASSWORD = os.getenv('MONGODB_PASSWORD')
+
+mongo_client = MongoClient("mongodb+srv://{MONGODB_USERNAME}:{MONGODB_PASSWORD}@cluster0.8sk8t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 
 
 db = mongo_client["shop_db"]
@@ -18,7 +24,6 @@ def products():
     products_list = products_collection.find()
     products_list = list(products_list)
 
-    # Print the products_list to see what you are retrieving
     print(products_list)
 
     return render_template('products.html', products=products_list)
